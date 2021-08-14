@@ -31,7 +31,7 @@ epsilon = r/R;                          %SS管应变
 
 
 %% 管线性应变约束
-epsilon_max = 0.002;                    %SS管线性应变段最大允许应变（如果超过，管子就可能塑性变形）
+epsilon_max = 0.0011;                    %SS管线性应变段最大允许应变（如果超过，管子就可能塑性变形）
 %约束条件2
 % epsilon <= epsilon_max                %线性应变约束
 
@@ -59,7 +59,7 @@ Dy = 2*D(2);                            %驱动端两最近点距离
 % 如按薄壁管计算 - 厚度<=半径/10
 % J = pi*(ODs_i-IDs_i)*ODs_i^3/8;            %ss管极惯性矩, m^4
 
-G = 79.38*10^9;                         % ss管剪切模量（奥氏体1Cr18Ni9Ti不锈钢），Pa
+G = 77*10^9;                            % ss管剪切模量（奥氏体1Cr18Ni9Ti不锈钢），Pa
 theta_max = deg2rad(3);                 % ss管最大允许扭转角度 5°
 
 %tube 2
@@ -91,7 +91,7 @@ lb = optimvar('lb','LowerBound',0,'UpperBound',1);
 alpha = optimvar('alpha','LowerBound',0,'UpperBound',pi/2);
 
 %目标函数
-%prob.Objective = -((11*lb)/50 + (11*le)/50 + 143/5000)/(2480625000*pi*((ODs_2 + 1/5000)^4 - ODs_1^4))  %薄壁内管扭转角最小
+%prob.Objective = -((11*lb)/50 + (11*le)/50 + 143/5000)/(2406250000*pi*((ODs_2 + 1/5000)^4 - ODs_1^4))  %薄壁内管扭转角最小
 prob.Objective = le+lb    % 尺寸最compact
 prob.ObjectiveSense = 'minimize';
 
@@ -100,8 +100,8 @@ cons_1 = ODs_2<= ODs_1-2*w-2*delta;             %SS管外径ODs_2的尺寸约束
 cons_2 = (ODs_1*alpha)/(2*lb)<=epsilon_max;     %线性应变约束
 cons_3 = 2*le*sin(alpha) - (3*cos(alpha))/125 - (2*lb*(cos(alpha) - 1))/alpha + 4/625 >= d_min;  %电机端不干涉约束
 % theta_1==theta_2
-cons_4 = -((11*lb)/50 + (11*le)/50 + 143/5000)/(2480625000*pi*((ODs_2 + 1/5000)^4 - ODs_1^4))==(lb/5 + le/5 + 19/500)/(2480625000*pi*(ODs_2^4 - 4111825577611637/77371252455336267181195264)); %最内SS管扭转角约束
-cons_5 = -((11*lb)/50 + (11*le)/50 + 143/5000)/(2480625000*pi*((ODs_2 + 1/5000)^4 - ODs_1^4))<=theta_max;
+cons_4 = -((11*lb)/50 + (11*le)/50 + 143/5000)/(2406250000*pi*((ODs_2 + 1/5000)^4 - ODs_1^4))==(lb/5 + le/5 + 19/500)/(2406250000*pi*(ODs_2^4 - 4111825577611637/77371252455336267181195264)); %最内SS管扭转角约束
+cons_5 = -((11*lb)/50 + (11*le)/50 + 143/5000)/(2406250000*pi*((ODs_2 + 1/5000)^4 - ODs_1^4))<=theta_max;
 
 %在问题中包含约束 - 其余的约束直接在定义优化变量的时候在上下界处给出了
 prob.Constraints.cons1 = cons_1;
@@ -130,10 +130,10 @@ nx = norm([sol.ODs_1 sol.ODs_2 sol.lb sol.le sol.alpha])                        
 %% 优化结果手动输出
 alpha_deg = rad2deg(sol.alpha)
 
-theta_1 = -((11*sol.lb)/50 + (11*sol.le)/50 + 143/5000)/(2480625000*pi*((sol.ODs_2 + 1/5000)^4 - sol.ODs_1^4))
-theta_2 = (sol.lb/5 + sol.le/5 + 19/500)/(2480625000*pi*(sol.ODs_2^4 - 4111825577611637/77371252455336267181195264))
-theta_1_deg = rad2deg(-((11*sol.lb)/50 + (11*sol.le)/50 + 143/5000)/(2480625000*pi*((sol.ODs_2 + 1/5000)^4 - sol.ODs_1^4)))
-theta_2_deg = rad2deg((sol.lb/5 + sol.le/5 + 19/500)/(2480625000*pi*(sol.ODs_2^4 - 4111825577611637/77371252455336267181195264)))
+theta_1 = -((11*sol.lb)/50 + (11*sol.le)/50 + 143/5000)/(2406250000*pi*((sol.ODs_2 + 1/5000)^4 - sol.ODs_1^4))
+theta_2 = (sol.lb/5 + sol.le/5 + 19/500)/(2406250000*pi*(sol.ODs_2^4 - 4111825577611637/77371252455336267181195264))
+theta_1_deg = rad2deg(theta_1)
+theta_2_deg = rad2deg(theta_2)
 
 IDs_2
 ODs_2 = sol.ODs_2
