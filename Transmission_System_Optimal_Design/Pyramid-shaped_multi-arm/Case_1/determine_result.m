@@ -1,12 +1,14 @@
 %% Determine the Final Optimizing Result
-% 根据Pareto front，选择最优点，确定各设计参数
-% by Zhang Chao
-% Date：2022/10/21
+% by Chao Zhang
+% Date：2022/11/21
 
 clear;clc;
 
 %% Load CTR params
 CTR_params;
+
+%% Choose a Preferred Point on Pareto front in which
+zeta_max = deg2rad(4);
 
 
 %% Optimization variables
@@ -20,23 +22,22 @@ beta_2 = optimvar('beta_2','LowerBound',0,'UpperBound',pi);
 
 
 %% Geometric Constraints - Relations of tube diameters
-IDs_2 = ODn_2+2*b;                      % 最内SS管内径
+IDs_2 = ODn_2+2*b;                      % Inner diameter of SS tube 2 (inner tube)
 %ODs_1 <= min(a,D-a/cos(pi/2-pi/n));
 %ODs_1 >= ODn_1+2*b+2*w;
 %ODs_2 >= max(ODn_1+2*b-2*delta,ODn_2+2*b+2*w)
 %ODs_2 <= ODs_1-2*w-2*delta
 
 
-%% Geometric Constraints - Shape and dimensions of SS tubes
-v = 2/3 * lb * alpha;                   % 最大挠曲变形
-%R = lb/alpha;                           % 圆弧段弯曲半径
-L1 = delta_L_1+le+lb+lc;                % 管1总长度
-L2 = delta_L_2+le+lb+lc;                % 管2总长度
+%% Geometric Constraints - Shape and length of SS tubes
+v = 2/3 * lb * alpha;                   % Maximum deflection of SS tube
+L1 = delta_L_1+le+lb+lc;                % Length of SS tube 1
+L2 = delta_L_2+le+lb+lc;                % Length of SS tube 2
 % le >= le_min
 
 
 %% Geometric Constraints - Collision avoidance of actuation units
-% 建立坐标系，空间各点坐标
+% Coordinates of tube points
 O = [0;0;0];
 O1  = [sqrt(3)/3*a;0;0];
 O2  = [-sqrt(3)/6*a;a/2;0];
@@ -57,7 +58,7 @@ C1 = [sqrt(3)/3*a+v+le*sin(alpha);0;lc+lb+le*cos(alpha)];
 C2 = [-sqrt(3)/6*a+(v+le*sin(alpha))*cos(beta_1);a/2+(v+le*sin(alpha))*sin(beta_1);lc+lb+le*cos(alpha)];
 C3 = [-sqrt(3)/6*a+(v+le*sin(alpha))*cos(beta_1+beta_2);-a/2+(v+le*sin(alpha))*sin(beta_1+beta_2);lc+lb+le*cos(alpha)];
 
-% actuation module中心点连线矢量
+% line vector
 C1C2 = C2-C1;
 C2C3 = C3-C2;
 C3C1 = C1-C3;
@@ -65,12 +66,12 @@ d_C1C2 = sqrt(C1C2(1)^2+C1C2(2)^2);
 d_C2C3 = sqrt(C2C3(1)^2+C2C3(2)^2);
 d_C3C1 = sqrt(C3C1(1)^2+C3C1(2)^2);
 
-% actuation module平面法向量
+% Normal vector of the plane \kappa_j
 n1 = (C1-B1)/le;
 n2 = (C2-B2)/le;
 n3 = (C3-B3)/le;
 
-% 连线矢量和平面夹角
+% Included angle between the line and the plane
 sin_gama12 = dot(n1,C1C2)/d_C1C2;
 sin_gama21 = dot(n2,-C1C2)/d_C1C2;
 sin_gama23 = dot(n2,C2C3)/d_C2C3;
@@ -78,7 +79,7 @@ sin_gama32 = dot(n3,-C2C3)/d_C2C3;
 sin_gama31 = dot(n3,C3C1)/d_C3C1;
 sin_gama13 = dot(n1,-C3C1)/d_C3C1;
 
-% 圆面线段投影
+% Projecting the radius ra
 d_C1D12 = ra*sqrt(1-sin_gama12^2);
 d_C2D21 = ra*sqrt(1-sin_gama21^2);
 d_C2D23 = ra*sqrt(1-sin_gama23^2);
@@ -86,51 +87,52 @@ d_C3D32 = ra*sqrt(1-sin_gama32^2);
 d_C3D31 = ra*sqrt(1-sin_gama31^2);
 d_C1D13 = ra*sqrt(1-sin_gama13^2);
 
+% Minimum distance between adjacent actuation units
 d1 = ( d_C1C2 - d_C1D12 - d_C2D21 );
 d2 = ( d_C2C3 - d_C2D23 - d_C3D32 );
 d3 = ( d_C3C1 - d_C3D31 - d_C1D13 );
+%di>=0
 
 
 %% Deformation Constraints - Elastic strain limit of bending
-epsilon = ODs_1*alpha/lb;               % SS管应变
-%epsilon <= epsilon_e                    %线性应变约束
+epsilon = ODs_1*alpha/lb;               % Maximum bendign strain in SS tube
+%epsilon <= epsilon_e
 
 
 %% Deformation Constraints - Torsional twisting of SS tubes
-% 内管
-J2 = pi*(ODs_2^4-IDs_2^4)/32;           % 极惯性矩，m^4
-kz_2 = Gs*J2;                           % 扭转刚度，m^4*Pa
-zeta_2 = tau_2_max*(L2)/kz_2;           % 扭转角度,rad
+% Inner SS tube
+J2 = pi*(ODs_2^4-IDs_2^4)/32;           % Cross-sectional polar moment of inertia, m^4
+kz_2 = Gs*J2;                           % Torsion stiffness, m^4*Pa
+zeta_2 = tau_2_max*(L2)/kz_2;           % Maximum relative twist angle, rad
 
-% 外管
-IDs_1 = ODs_2+2*delta;                  % 外管内径
-J1 = pi*(ODs_1^4-IDs_1^4)/32;           % 极惯性矩，m^4
-kz_1 = Gs*J1;                           % 扭转刚度，m^4*Pa
-zeta_1 = tau_1_max*(L1)/kz_1;           % 扭转角度,rad
+% Outer SS tube
+IDs_1 = ODs_2+2*delta;                  % Inner diameter of outter SS tube
+J1 = pi*(ODs_1^4-IDs_1^4)/32;           % Cross-sectional polar moment of inertia
+kz_1 = Gs*J1;                           % Torsion stiffness
+zeta_1 = tau_1_max*(L1)/kz_1;           % Maximum relative twist angle
 
 
-%% 创建优化问题
+%% Formulating the Optimization Problem
 prob = optimproblem;
 
-%目标函数
-choose_func = 1;
+% Optimization function
+choose_func = 2;
 if choose_func == 1
-    prob.Objective = zeta_1;    % 相对扭转角最小
+    prob.Objective = zeta_1;    % Maxium relative twist angle
 else
-    prob.Objective = le+lb;    % 尺寸最compact
+    prob.Objective = le+lb;     % System compactness
 end
 prob.ObjectiveSense = 'minimize';
 
-%约束条件
-cons_1 = ODs_2<=ODs_1-2*w-2*delta;  % SS管外径ODs_2的尺寸约束
-cons_2 = epsilon<=epsilon_e;        % 线性应变约束
-cons_3 = zeta_1==zeta_2;            % 各管相对扭转角相等
-cons_4 = zeta_2<=zeta_max;          % 相对扭转角小于最大允许值
-cons_5 = d1>=0;                      %collision avoidance
+% Design constraints
+cons_1 = ODs_2<=ODs_1-2*w-2*delta;  % Tube diameters
+cons_2 = epsilon<=epsilon_e;        % Elastic strain limit
+cons_3 = zeta_1==zeta_2;            % Maximum relative twist angle
+cons_4 = zeta_2<=zeta_max;          % Maximum relative twist angle
+cons_5 = d1>=0;                     % Collision avoidance
 cons_6 = d2>=0;
 cons_7 = d3>=0;
 
-%在问题中包含约束 - 其余的约束直接在定义优化变量的时候在上下界处给出了
 prob.Constraints.cons1 = cons_1;
 prob.Constraints.cons2 = cons_2;
 prob.Constraints.cons3 = cons_3;
@@ -139,10 +141,9 @@ prob.Constraints.cons5 = cons_5;
 prob.Constraints.cons6 = cons_6;
 prob.Constraints.cons7 = cons_7;
 
-%检查此优化问题
 show(prob)
 
-%初值
+% Initial values
 initialpt.ODs_1 = ODn_1;
 initialpt.ODs_2 = ODn_2;
 initialpt.lb = 0;
@@ -151,10 +152,10 @@ initialpt.le = le_min;
 initialpt.beta_1 = 2*pi/n;
 initialpt.beta_2 = 2*pi/n;
 
-%求解问题
+% Solve the problem
 [sol,fval] = solve(prob,initialpt)
 
-%检查解
+% Check the result
 nx = norm([sol.ODs_1 sol.ODs_2 sol.lb sol.le sol.alpha sol.beta_1 sol.beta_2])                        %范数要确保小于或等于1
 
 %% Optimal Design Results

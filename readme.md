@@ -15,11 +15,22 @@ This repository contains code about how to design an optimal pyramid-shaped tran
 * assets (*PDF and figures, etc*)
 * Transmission_System_Optimal_Design (*Matlab code*)
   * Pyramid-shaped_multi-arm
-    * Case 1
+    * Case_1
       * CTR_params.m
+	  * optimal_design_framework.m
+	  * variables_variation.m
       * determine_result.m
-      * 
-    * Case 2
+      * elastic_stability.m
+	  * multiobjective_func.m
+	  * nonlinear_constraints.m
+    * Case_2
+	  * CTR_params.m
+	  * optimal_design_framework.m
+	  * variables_variation.m
+      * determine_result.m
+      * elastic_stability.m
+	  * multiobjective_func.m
+	  * nonlinear_constraints.m
   * Y-shaped_dual-arm
 
 ## Runding the Code
@@ -29,11 +40,12 @@ This repository contains code about how to design an optimal pyramid-shaped tran
 
 <img src="assets/pareto_front.png">
 
-3. Run "variables_varying.m" to see the variation of optimization variable **x** = [OD~s1~, OD~s2~, ..., OD~sm~, l~b~, \alpha, l~e~, \beta~1~, \beta~2~, ..., \beta~n-1~] ; 
+3. Run "variables_varying.m" to see the variation of optimization variable **x** = [$OD_{s1}$, $OD_{s2}, $\cdots$, $OD_{sm}$, $l_b$, $\alpha$, $l_e$, $\beta_1$, $\beta_2$, $cdots$, $\beta_{n-1}$] ; 
 
 <img src="assets/variable_variation.png">
 
-4. Run "determine_result.m" to get the final optimal result
+4. Run "determine_result.m" to get the final optimal result.
+
 
 
 

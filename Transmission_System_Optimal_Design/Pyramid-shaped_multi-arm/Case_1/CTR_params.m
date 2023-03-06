@@ -1,47 +1,46 @@
-%% 三臂CTR，每臂由一对 NiTi balanced pair组成  - 设计参数
-% 只是 NiTi manipulator
-% by Zhang Chao
+%% Design Parameters of the NiTi Manipulator
+% It is a triple-arm CTR with 2 tubes in each arm
+% by Chao Zhang
 % Date：2022/10/20
 
-%% 管子相关
-% NiTi管相关
-En = 48.7e9;                              % NiTinol材料弹性模量，Pa
-poisson_rate = 0.3;                     % Nitinol材料泊松比
-Gn = En/(2*(1+poisson_rate));           % Nitinol材料剪切模量,Pa
+%% Parameters of NiTi Manipulator
+n = 3;                                  % Number of arms
+a = 5e-3;                               % Center distrance between adjacent arms, m
+D = 12e-3;                              % Straight sheath diameter
 
-ODn_1 = 2.7e-3;                         % 外NiTi管外径
-IDn_1 = 2.4e-3;                         % 外NiTi管内径
-ODn_2 = 2.2e-3;                         % 内NiTi管外径
-IDn_2 = 1.4e-3;                         % 内NiTi管内径
+En = 48.7e9;                            % NiTi elastic modulus, Pa
+poisson_rate = 0.3;                     % NiTi Poisson's ratio
+Gn = En/(2*(1+poisson_rate));           % NiTi shear modulus
 
-r1 = 135e-3;                            % 外NiTi管预弯曲半径
-s1 = 160e-3;                            % 外NiTi管弧长
-r2 = r1;                                % 外NiTi管预弯曲半径
-s2 = s1;                                % 外NiTi管弧长
+ODn_1 = 2.7e-3;                         % Outer diameter of NiTi tube 1 (outer tube)
+IDn_1 = 2.4e-3;                         % Inner diameter of NiTi tube 1 (outer tube)
+ODn_2 = 2.2e-3;                         % Outer diameter of NiTi tube 2 (inner tube)
+IDn_2 = 1.4e-3;                         % Inner diameter of NiTi tube 2 (inner tube)
 
-% SS管相关
-Es = 193e9;                             % SS材料弹性模量，Pa
-Gs = 72e9;                              % SS材料剪切模量（奥氏体1Cr18Ni9Ti不锈钢）
-yeild_s = 310e6;                        % SS材料tensile yield stress（屈服应力）
-epsilon_e = yeild_s/Es;                 % SS管线性应变段最大允许应变（如果超过，管子就可能塑性变形）
-zeta_max = deg2rad(8);                  % SS管最大允许扭转角度
+r1 = 135e-3;                            % Pre-curvature of tube 1
+s1 = 160e-3;                            % Arc lenth of tube 1
+r2 = r1;                                % Pre-curvature of tube 2
+s2 = s1;                                % Arc lenth of tube 2
 
-% NiTi管和SS粘接参数
-b = 0.1e-3;                             % SS管和NiTi管最小粘接间隙
-w = 0.1e-3;                             % SS管最小壁厚
-delta = 0.1e-3;                         % SS管间最小游动间隙
-
-
-%% 整机相关
-n = 3;                                  % 手臂数
-a = 5e-3;                             % 臂间中心距,m
-D = 12e-3;                              % 单孔手术的孔径
-lc = 80e-3;                             % SS即管伸出直线段的长度,准直器
-le_min = 40e-3;                         % le最小距离
-delta_L_1 = 100e-3;                  	% SS管1电机端到lp起点的距离
-delta_L_2 = 145e-3;                     % SS管2电机端到le起点的距离
-ra = 18e-3;                             % 驱动端安全圆半径（最大直径为35mm）
-
-% s = 160e-3时
-tau_1_max = 0.200283940448042;          % NiTi tube pair弹性作用扭矩，根据elastic_stability.m
+tau_1_max = 0.200283940448042;          % Generated torque, calculated by "elastic_stability.m"
 tau_2_max = 0.200283940448042;
+
+
+%% Parameters of Stainless Steel (SS) Tubes (SUS 316L)
+Es = 193e9;                             % SS elastic modulus, Pa 
+Gs = 72e9;                              % SS shear modulus
+yeild_s = 310e6;                        % SS tensile yield stress
+epsilon_e = yeild_s/Es;                 % SS elastic strain limit
+
+zeta_max = deg2rad(8);                  % SS maximum allowable relatice twist angle, deg
+
+b = 0.1e-3;                             % Minimum bonding thickness bewtween SS and NiTi tubes
+w = 0.1e-3;                             % Minimum wall thickness of SS tube
+delta = 0.1e-3;                         % Minimum clearence between SS tubes
+
+lc = 80e-3;                             % Length of the straight sheath
+le_min = 40e-3;                         % Minimum allowable le
+delta_L_1 = 100e-3;                  	% Distance from the first actuation module forward limiting position to the bending unit
+delta_L_2 = 145e-3;                     % Distance from the second actuation module forward limiting position to the bending unit
+ra = 18e-3;                             % Radius of collision hazard region
+
