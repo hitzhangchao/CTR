@@ -13,19 +13,18 @@ This repository contains the accompanying code of our manuscript "Design Optimiz
 ## File Tree
 
 * assets (*PDF and figures, etc*)
-* Transmission_System_Optimal_Design (*Matlab code*)
-  * Y-shaped_dual-arm
-  * Pyramid-shaped_multi-arm
-    * Case_1
-      * CTR_params.m
-  	  * optimal_design_framework.m
-  	  * variables_variation.m
-      * determine_result.m
-  	  * multiobjective_func.m
-  	  * nonlinear_constraints.m
-  	  * elastic_stability.m
-    * Case_2
-      * $\cdots$
+* Y-shaped_dual-arm
+* Pyramid-shaped_multi-arm
+  * Case_1
+    * CTR_params.m
+  	* optimal_design_framework.m
+  	* variables_variation.m
+    * determine_result.m
+  	* multiobjective_func.m
+  	* nonlinear_constraints.m
+  	* elastic_stability.m
+  * Case_2
+    * $\cdots$
 
 
 ## Runding the Code (*Case_1*)
