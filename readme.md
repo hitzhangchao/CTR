@@ -5,7 +5,7 @@
 ## Introduction
 This repository contains the accompanying code of our manuscript "Design Optimization of Pyramid-Shaped Transmission System for Multi-Arm Concentric-Tube Robots (CTR)".
 
-* Full paper PDF: [Manuscript submitted to TMECH.](assets/Manuscript.pdf)
+* [Full paper PDF](assets/Manuscript.pdf)
 
 * Authors: *Chao Zhang, Guangdu Cen, Xing Yang, et al.*
 
