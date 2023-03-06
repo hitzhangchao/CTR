@@ -11,7 +11,7 @@ CTR_params;
 zeta_max = deg2rad(4);
 
 
-%% Optimization variables
+%% Optimization Variables
 ODs_1 = optimvar('ODs_1','LowerBound',ODn_1+2*b+2*w,'UpperBound',min(a,D-a/sin(pi/n)));
 ODs_2 = optimvar('ODs_2','LowerBound',max(ODn_1+2*b-2*delta,ODn_2+2*b+2*w),'UpperBound',min(a,D-a/sin(pi/n))-2*w-2*delta);
 lb = optimvar('lb','LowerBound',50e-3,'UpperBound',200e-3);
@@ -156,7 +156,7 @@ initialpt.beta_2 = 2*pi/n;
 [sol,fval] = solve(prob,initialpt)
 
 % Check the result
-nx = norm([sol.ODs_1 sol.ODs_2 sol.lb sol.le sol.alpha sol.beta_1 sol.beta_2])                        %范数要确保小于或等于1
+nx = norm([sol.ODs_1 sol.ODs_2 sol.lb sol.le sol.alpha sol.beta_1 sol.beta_2])
 
 %% Optimal Design Results
 ODs_1 = sol.ODs_1

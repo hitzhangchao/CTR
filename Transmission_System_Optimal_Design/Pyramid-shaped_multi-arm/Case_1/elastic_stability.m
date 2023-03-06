@@ -1,4 +1,4 @@
-%% Elastic Stability of "SS+NiTi" tube pair
+%% Elastic Stability of "SS + NiTi" tube pair
 % by Chao Zhang
 % Date：2022/10/20
 
@@ -9,7 +9,7 @@ CTR_params;
 
 
 %% NiTi tube params
-% Outter tube
+% Outer tube
 k1x = pi*En*(ODn_1^4-IDn_1^4)/64;       % Bending stiffness
 k1y = k1x;
 k1z = k1x/(1+poisson_rate);             % Torsional stiffness
