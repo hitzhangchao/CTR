@@ -1,31 +1,40 @@
 <img src="assets/transmission_system_diagram.png">
 
-# Design Optimization of CTR Transmission System
+# Design Optimization of Pyramid-Shaped Transmission System for Multiarm Concentric-Tube Robots
 
 ## Introduction
-This repository contains the accompanying code of our manuscript "Design Optimization of Pyramid-Shaped Transmission System for Multi-Arm Concentric-Tube Robots (CTR)".
+This repository contains the accompanying code of our paper "Design Optimization of Pyramid-Shaped Transmission System for Multiarm Concentric-Tube Robots", which was publicated in IEEE/ASME Transactions on Mechatronics.
 
-* [Full paper PDF](assets/Manuscript.pdf)
+* [Full Paper Link](https://ieeexplore.ieee.org/abstract/document/10386074)
 
 * Authors: *Chao Zhang, Guangdu Cen, Xing Yang, et al.*
 
 
 ## File Tree
 
-* assets (*PDF and figures, etc*)
+* assets (*Figures for readme.md*)
 * Y-shaped_dual-arm
 * Pyramid-shaped_multi-arm
-  * Case_1
+  * Case_1 (Three-armed CTR with 2 tubes in each arm)
+    * optimal_design_framework.m
     * CTR_params.m
-  	* optimal_design_framework.m
-  	* variables_variation.m
+    * elastic_stability.m
+    * multiobjective_func.m
+  	 * nonlinear_constraints.m
     * determine_result.m
-  	* multiobjective_func.m
-  	* nonlinear_constraints.m
-  	* elastic_stability.m
-  * Case_2
-    * $\cdots$
-
+  	 * variables_variation.m
+  * Case_2 (Four-armed CTR with 3 tubes in each arm)
+    * optimal_design_framework_2.m
+    * CTR_params_2.m
+    * multiobjective_func_2.m
+  	 * nonlinear_constraints_2.m
+    * determine_result_2.m
+  	 * variables_variation_2.m
+  * Torque_Calculation (Computing the maximum generated torque for case 2) 
+    * CTR_Torque.m
+    * CTR_params.m
+    * ctr_fk_compliant.m
+    * segment.m
 
 ## Runding the Code (*Case_1*)
 1. **Add forder path** to Matlab command window;
@@ -42,7 +51,7 @@ This repository contains the accompanying code of our manuscript "Design Optimiz
 
 
 ## Design Your Own Pyramid-Shaped Transmission System
-1. Modify "**CTR_params.m**" based on you own NiTi manipulators and SS tube materials. (The generated torque of NiTi manipulators can also be computed using "**elastic_stability.m**".)
+1. Modify "**CTR_params.m**" based on you own NiTi manipulators and SS tube materials. (The generated torque of NiTi manipulators can also be computed using "**elastic_stability.m**"(2 tubes case) or "**/Torque_Calculation/CTR_Torque.m**"(3 tubes case).)
 
 2. Run "**optimal_design_framework.m**" once, then update the two functions "**multiobjective_func.m**" and "**nonlinear_constraints.m**" manually based on the output of the code segment in **optimal_design_framework.m**
 
@@ -80,11 +89,3 @@ Cons_5 = (180/pi)*(zeta_1 - zeta_2)
 6. Modify "**determine_result.m**" based on your selected value, and then run it.
 
 You can get the optimally designed pyramid-shaped transmission system for your own multi-arm concentric-tube robot!
-
-
-
-
-
-
-
-
