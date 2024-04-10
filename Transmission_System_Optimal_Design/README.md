@@ -36,7 +36,7 @@ This repository contains the accompanying code of our paper "Design Optimization
     * ctr_fk_compliant.m
     * segment.m
 
-## Runding the Code (*Case_1*)
+## Running the Code (*Case_1*)
 1. **Add forder path** to Matlab command window;
 
 2. Run "**optimal_design_framework.m**" to establish the design constraints, formulate the multi-objective optimization problem, solve the problem, and get the Pareto front;
